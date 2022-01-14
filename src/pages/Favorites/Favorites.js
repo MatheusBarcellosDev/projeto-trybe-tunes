@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Header from '../components/Header';
-import { getFavoriteSongs } from '../services/favoriteSongsAPI';
-import MusicCard from '../components/MusicCard';
+import Header from '../../components/Header';
+import { getFavoriteSongs } from '../../services/favoriteSongsAPI';
+import MusicCard from '../../components/MusicCard';
 
 class Favorites extends Component {
   constructor() {
