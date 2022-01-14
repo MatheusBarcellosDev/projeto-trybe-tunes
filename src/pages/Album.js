@@ -22,7 +22,6 @@ class Album extends Component {
   getSong = async () => {
     const { match: { params: { id } } } = this.props;
     const musics = await getMusics(id).then((response) => response);
-    console.log(musics);
 
     this.setState({
       nameArtist: musics[0].artistName,
@@ -38,7 +37,11 @@ class Album extends Component {
         <p data-testid="artist-name">{nameArtist}</p>
         <p data-testid="album-name">{collectionName}</p>
         {musics.map((music) => music.previewUrl
-        && <MusicCard data={ music } key={ music.trackId } />)}
+        && <MusicCard
+          data={ music }
+          key={ music.trackId }
+
+        />)}
       </div>
     );
   }

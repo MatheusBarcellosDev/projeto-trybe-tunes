@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 import Loading from '../pages/Loading';
 
 class MusicCard extends Component {
@@ -13,18 +13,42 @@ class MusicCard extends Component {
     };
   }
 
-  handleClick = ({ target: { checked } }) => {
-    const { data: { trackId } } = this.props;
-    this.setState({
-      loading: true,
+  componentDidMount() {
+    const {
+      data: { trackId },
+    } = this.props;
+    getFavoriteSongs().then((response) => {
+      console.log(response);
+      response.forEach((song) => {
+        if (song.trackId === trackId) {
+          this.setState({
+            favorite: true,
+          });
+        }
+      });
     });
-    addSong(trackId, checked)
-      .then(() => {
+  }
+
+  handleClick = ({ target: { checked } }) => {
+    const { data } = this.props;
+
+    this.setState({ loading: true });
+
+    if (checked) {
+      addSong(data).then(() => {
         this.setState({
           loading: false,
-          favorite: checked,
+          favorite: true,
         });
       });
+    } else {
+      removeSong(data).then(() => {
+        this.setState({
+          loading: false,
+          favorite: false,
+        });
+      });
+    }
   };
 
   render() {
@@ -33,9 +57,11 @@ class MusicCard extends Component {
 
     return (
       <div>
-        {loading ? <Loading /> : (
+        {loading ? (
+          <Loading />
+        ) : (
           <>
-            <p>{ data.trackName }</p>
+            <p>{data.trackName}</p>
 
             <audio data-testid="audio-component" src={ data.previewUrl } controls>
               <track kind="captions" />
@@ -49,15 +75,13 @@ class MusicCard extends Component {
               <input
                 id="favorite"
                 data-testid={ `checkbox-music-${data.trackId}` }
-                onClick={ this.handleClick }
+                onChange={ this.handleClick }
                 checked={ favorite }
                 type="checkbox"
               />
             </label>
           </>
-
         )}
-
       </div>
     );
   }
