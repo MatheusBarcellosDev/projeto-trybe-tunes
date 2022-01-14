@@ -23,19 +23,22 @@ class Favorites extends Component {
   render() {
     const { favoriteSongs } = this.state;
     return (
-      <div>
+      <div data-testid="page-favorites">
         <Header />
-        {favoriteSongs.map((music) => {
-          if (music.previewUrl) {
-            return (
-              <MusicCard
-                data={ music }
-                key={ music.trackId }
-              />
-            );
-          }
-          return null;
-        })}
+        <div>
+          {favoriteSongs.map((music) => {
+            if (music.previewUrl) {
+              return (
+                <MusicCard
+                  data={ music }
+                  key={ music.trackId }
+                />
+              );
+            }
+            return null;
+          })}
+        </div>
+
       </div>
     );
   }
