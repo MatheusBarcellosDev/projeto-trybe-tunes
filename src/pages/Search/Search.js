@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import Header from '../../components/Header';
+import { Link, NavLink } from 'react-router-dom';
+import Header from '../../components/Header/Header';
 import searchAlbumsAPI from '../../services/searchAlbumsAPI';
+
+import Container from './styled';
 
 class Search extends Component {
   constructor(props) {
@@ -68,49 +70,63 @@ class Search extends Component {
     } = this.state;
 
     return (
-      <div data-testid="page-search">
+      <Container data-testid="page-search">
         <Header />
-        <form>
-          <label htmlFor="search-artist">
-            <input
-              data-testid="search-artist-input"
-              id="search-artist"
-              type="text"
-              placeholder="Nome do Artista"
-              name="nameArtist"
+        <div className="input-artist">
+          <form>
+            <label htmlFor="search-artist">
+              <input
+                data-testid="search-artist-input"
+                id="search-artist"
+                type="text"
+                placeholder="Artista"
+                name="nameArtist"
+                onChange={ this.handleChange }
+                value={ nameArtist }
+                autoComplete="off"
+              />
+            </label>
+            <button
+              type="submit"
+              data-testid="search-artist-button"
+              disabled={ btnSubmitDisabled }
               onChange={ this.handleChange }
-              value={ nameArtist }
-            />
-          </label>
-          <button
-            type="submit"
-            data-testid="search-artist-button"
-            disabled={ btnSubmitDisabled }
-            onChange={ this.handleChange }
-            onClick={ this.handleClick }
-          >
-            Pesquisar
-          </button>
-        </form>
-        <div>
+              onClick={ this.handleClick }
+            >
+              Pesquisar
+            </button>
+          </form>
+        </div>
+        <div className="container-albums">
           <h2>{`Resultado de álbuns de: ${searchArtist}`}</h2>
           {albumNotFound && <span>Nenhum álbum foi encontrado</span>}
-          {albumArtist.map(
-            ({ artistName, collectionId, collectionName, artworkUrl100 }) => (
-              <div key={ collectionId }>
-                <img src={ artworkUrl100 } alt={ collectionName } />
-                <Link
-                  to={ `/album/${collectionId}` }
-                  data-testid={ `link-to-album-${collectionId}` }
-                >
-                  <strong>{collectionName}</strong>
-                </Link>
-                <p>{artistName}</p>
-              </div>
-            ),
-          )}
+          <div className="container-album-result">
+            {albumArtist.map(
+              ({ artistName, collectionId, collectionName, artworkUrl100 }) => (
+                <div className="card-album" key={ collectionId }>
+                  <NavLink to={ `/album/${collectionId}` }>
+                    <div className="img-card">
+                      <img src={ artworkUrl100 } alt={ collectionName } />
+                    </div>
+                    <div className="info-card">
+                      <Link
+                        to={ `/album/${collectionId}` }
+                        data-testid={ `link-to-album-${collectionId}` }
+                      >
+                        <h3>{collectionName}</h3>
+                      </Link>
+                      <p>{artistName}</p>
+                    </div>
+                  </NavLink>
+
+                </div>
+              ),
+            )}
+
+          </div>
+
         </div>
-      </div>
+      </Container>
     );
   }
 }

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Header from '../../components/Header';
+import Header from '../../components/Header/Header';
 import getMusics from '../../services/musicsAPI';
-import MusicCard from '../../components/MusicCard';
+import MusicCard from '../../components/MusicCard/MusicCard';
+
+import Container from './styled';
 
 class Album extends Component {
   constructor(props) {
@@ -11,6 +13,7 @@ class Album extends Component {
     this.state = {
       nameArtist: '',
       collectionName: '',
+      imgAlbum: '',
       musics: [],
     };
   }
@@ -26,23 +29,36 @@ class Album extends Component {
     this.setState({
       nameArtist: musics[0].artistName,
       collectionName: musics[0].collectionName,
+      imgAlbum: musics[0].artworkUrl100,
     }, () => { this.setState({ musics }); });
   }
 
   render() {
-    const { nameArtist, collectionName, musics } = this.state;
+    const { nameArtist, collectionName, musics, imgAlbum } = this.state;
     return (
-      <div data-testid="page-album">
+      <Container data-testid="page-album">
         <Header />
-        <p data-testid="artist-name">{nameArtist}</p>
-        <p data-testid="album-name">{collectionName}</p>
-        {musics.map((music) => music.previewUrl
+        <div className="container-album">
+          <div className="container-infos">
+            <div className="img-album">
+              <img src={ imgAlbum } alt="Capa album" />
+            </div>
+            <div className="title-album">
+              <h3 data-testid="artist-name">{nameArtist}</h3>
+              <span data-testid="album-name">{collectionName}</span>
+            </div>
+
+          </div>
+          <div className="container-musics">
+            {musics.map((music) => music.previewUrl
         && <MusicCard
           data={ music }
           key={ music.trackId }
-
         />)}
-      </div>
+          </div>
+        </div>
+
+      </Container>
     );
   }
 }

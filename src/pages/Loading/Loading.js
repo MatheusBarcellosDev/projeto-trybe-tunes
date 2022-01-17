@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import Container from './styled';
 
 class Loading extends Component {
   render() {
     return (
-      <div>
+      <Container>
         <h1>Carregando...</h1>
-      </div>
+      </Container>
     );
   }
 }

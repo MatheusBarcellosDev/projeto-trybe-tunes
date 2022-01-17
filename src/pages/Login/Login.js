@@ -3,6 +3,10 @@ import { Redirect } from 'react-router-dom';
 import { createUser } from '../../services/userAPI';
 import Loading from '../Loading/Loading';
 
+import Container from './styled';
+
+import LOGO from './assets/LOGO.svg';
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -55,37 +59,46 @@ class Login extends Component {
   render() {
     const { btnSubmitDisabled, nameUser, isLoading, redirect } = this.state;
     return (
-      <div data-testid="page-login">
+      <Container data-testid="page-login">
         { redirect && <Redirect to="/search" />}
         { isLoading ? <Loading /> : (
-          <form>
-            <label htmlFor="idUser">
-              <input
-                id="idUser"
-                data-testid="login-name-input"
-                type="text"
-                placeholder="Digite seu usuário"
-                value={ nameUser }
-                name="nameUser"
-                onChange={ this.handleChange }
-              />
-            </label>
+          <>
+            <div className="img-logo">
+              <img src={ LOGO } alt="Logo" />
+            </div>
 
-            <button
-              id="btnSubmit"
-              type="submit"
-              data-testid="login-submit-button"
-              disabled={ btnSubmitDisabled }
-              onClick={ this.handleClick }
-            >
-              Entrar
+            <form>
+              <div className="input-group">
+                <label htmlFor="idUser">
+                  <input
+                    id="idUser"
+                    data-testid="login-name-input"
+                    type="text"
+                    placeholder="Usuário"
+                    value={ nameUser }
+                    name="nameUser"
+                    onChange={ this.handleChange }
+                    autoComplete="off"
+                  />
 
-            </button>
+                  <button
+                    id="btnSubmit"
+                    type="submit"
+                    data-testid="login-submit-button"
+                    disabled={ btnSubmitDisabled }
+                    onClick={ this.handleClick }
+                  >
+                    Entrar
 
-          </form>
+                  </button>
+                </label>
+              </div>
+
+            </form>
+          </>
         ) }
 
-      </div>
+      </Container>
     );
   }
 }
